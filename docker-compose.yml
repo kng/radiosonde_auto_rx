@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  radiosonde_auto_rx:
+    image: 'ghcr.io/projecthorus/radiosonde_auto_rx:latest'
+    build:
+      context: .
+    #read_only: true
+    restart: 'unless-stopped'
+    init: true
+    entrypoint: ''
+    #network: 'host'
+    ports:
+      - '5000:5000'
+    device_cgroup_rules:
+      - 'c 189:* rwm'
+    devices:
+      - '/dev/bus/usb'
+    volumes:
+      - type: 'bind'
+        source: 'station.cfg'
+        target: '/opt/auto_rx/station.cfg'
+        read_only: true
+      - type: 'bind'
+        source: 'log/'
+        target: '/opt/auto_rx/log/'
